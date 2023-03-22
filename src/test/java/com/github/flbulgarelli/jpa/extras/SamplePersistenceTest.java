@@ -8,7 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.github.flbulgarelli.jpa.extras.perthread.PerThreadEntityManagerAccess;
 import com.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
+import com.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
 import org.junit.jupiter.api.Test;
 import com.github.flbulgarelli.jpa.extras.test.PersistenceTest;
 
@@ -18,7 +21,7 @@ public class SamplePersistenceTest implements PersistenceTest, WithSimplePersist
     Persistable persistable = new Persistable();
 
     assertNull(persistable.getId());
-    entityManager().persist(persistable);
+    persist(persistable);
     assertNotNull(persistable.getId());
   }
 

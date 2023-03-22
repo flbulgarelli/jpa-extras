@@ -17,7 +17,8 @@ class JpaSchemaExportTest {
     JpaSchemaExport.execute(SIMPLE_PERSISTENCE_UNIT_NAME, schema.toString(), false);
     assertEquals(
             "create sequence hibernate_sequence start with 1 increment by 1;\n" +
-                    "create table Persistables (id bigint not null, aDate date, aString varchar(255), primary key (id));\n",
+                    "create table Persistables (id bigint not null, aDate date, aString varchar(255), primary key (id));\n" +
+                    "create table Users (id bigint not null, primary key (id));\n",
             Files.readString(schema));
   }
 
@@ -31,6 +32,11 @@ class JpaSchemaExportTest {
                     "       id bigint not null,\n" +
                     "        aDate date,\n" +
                     "        aString varchar(255),\n" +
+                    "        primary key (id)\n" +
+                    "    );\n" +
+                    "\n" +
+                    "    create table Users (\n" +
+                    "       id bigint not null,\n" +
                     "        primary key (id)\n" +
                     "    );\n",
             Files.readString(schema));
