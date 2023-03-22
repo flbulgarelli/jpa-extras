@@ -14,7 +14,7 @@ This is a small library that simplifies usage of JPA/Hibernate. It adds:
 Just add `WithSimplePersistenceUnit`:
 
 ```java
-import com.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
+import simple.io.github.flbulgarelli.jpa.extras.WithSimplePersistenceUnit;
 
 public class UserRepository implements WithSimplePersistenceUnit {
 
@@ -44,7 +44,7 @@ the corresponding `EntityManager`:
 In order to test code that has access to persistence context, just add the `SimplePersistenceTest` mixin to your Junit 5 test classes:
 
 ```java
-import com.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
+import test.io.github.flbulgarelli.jpa.extras.SimplePersistenceTest;
 
 public class ATest implements SimplePersistenceTest {
   @Test
@@ -58,7 +58,7 @@ By using this mixin, all your code is going to be run within a transaction. Also
 the `EntityManagerOps` helpers:
 
 ```java
-import com.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
+import test.io.github.flbulgarelli.jpa.extras.SimplePersistenceTest;
 
 public class ATest implements SimplePersistenceTest {
   @Test
@@ -84,7 +84,7 @@ JPA does not provide an easy way to generate the SQL schema. With this library, 
 
 If you are using IntelliJ, you can add a Run Configuration with the following parameters:
 
-- Main class: `com.github.flbulgarelli.jpa.extras.export.JpaSchemaExport`
+- Main class: `export.io.github.flbulgarelli.jpa.extras.JpaSchemaExport`
 - Program arguments: `-o schema.sql -f`
 - `Modify Options` -> `Add Run Options`-> `Java` -> `Add provided dependencies with "provided" scope to classpath`
 
@@ -97,7 +97,7 @@ dependency into your `pom.xml` file:
 
 ```xml
     <dependency>
-      <groupId>com.github.flbulgarelli</groupId>
+      <groupId>io.github.flbulgarelli</groupId>
       <artifactId>jpa-extras</artifactId>
       <version>1.0.0</version>
     </dependency>
