@@ -29,7 +29,7 @@ import static io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit
  */
 public class JpaSchemaExport {
 
-  public static void main(String[] args) throws Exception {
+  public static void main(String[] args) {
     CommandLine cmd = parse(args).orElseGet(() -> {
       System.exit(1);
       return null;

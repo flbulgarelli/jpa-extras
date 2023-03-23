@@ -43,8 +43,8 @@ public class PerThreadEntityManagerProperties {
    * @throws UncheckedIOException if the file can not be read
    */
   public PerThreadEntityManagerProperties load(String path) {
-    try {
-      this.properties.load(Files.newInputStream(Paths.get(path)));
+    try (var stream = Files.newInputStream(Paths.get(path))) {
+      this.properties.load(stream);
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }

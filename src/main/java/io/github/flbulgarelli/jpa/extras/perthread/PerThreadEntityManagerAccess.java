@@ -47,7 +47,7 @@ public class PerThreadEntityManagerAccess {
 
   private EntityManagerFactory getEmf() {
     return emfHolder.computeIfAbsent(persistenceUnitName,
-            (name) -> Persistence.createEntityManagerFactory(name, properties.get()));
+            name -> Persistence.createEntityManagerFactory(name, properties.get()));
   }
 
   /**
@@ -108,7 +108,7 @@ public class PerThreadEntityManagerAccess {
     EntityManager em = threadLocal.get();
     if (em != null) {
       em.close();
-      threadLocal.set(null);
+      threadLocal.remove();
     }
   }
 }
