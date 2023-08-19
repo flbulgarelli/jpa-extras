@@ -1,5 +1,7 @@
-JPA/Hibernate Java 11+ Extras
+JPA/Hibernate Java 17+ Extras
 ==============================
+
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.flbulgarelli/jpa-extras/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.flbulgarelli/jpa-extras)
 
 This is a small library that simplifies usage of JPA/Hibernate. It adds:
 
@@ -14,7 +16,7 @@ This is a small library that simplifies usage of JPA/Hibernate. It adds:
 Just add `WithSimplePersistenceUnit`:
 
 ```java
-import simple.io.github.flbulgarelli.jpa.extras.WithSimplePersistenceUnit;
+import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 
 public class UserRepository implements WithSimplePersistenceUnit {
 
@@ -44,7 +46,7 @@ the corresponding `EntityManager`:
 In order to test code that has access to persistence context, just add the `SimplePersistenceTest` mixin to your Junit 5 test classes:
 
 ```java
-import test.io.github.flbulgarelli.jpa.extras.SimplePersistenceTest;
+import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
 
 public class ATest implements SimplePersistenceTest {
   @Test
@@ -58,7 +60,7 @@ By using this mixin, all your code is going to be run within a transaction. Also
 the `EntityManagerOps` helpers:
 
 ```java
-import test.io.github.flbulgarelli.jpa.extras.SimplePersistenceTest;
+import io.github.flbulgarelli.jpa.extras.test.SimplePersistenceTest;
 
 public class ATest implements SimplePersistenceTest {
   @Test
