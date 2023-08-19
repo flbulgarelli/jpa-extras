@@ -9,7 +9,7 @@ This is a small library that simplifies usage of JPA/Hibernate. It adds:
   2. Better support for transactional code
   3. Support for persisting lambdas
   4. Junit 5 Persistence Tests
-  5. Schema Generation * `remove`
+  5. Schema Generation
 
 ## 1. Entity Manager injection
 
@@ -35,11 +35,11 @@ public class UserRepository implements WithSimplePersistenceUnit {
 By using this mixin, you'll get access to an `entityManager()`, plus some helper methods that act as shortcuts to
 the corresponding `EntityManager`:
 
- * `persist`
- * `merge`
- * `remove`
- * `find`
- * `createQuert`
+ * `persist`. See [EntityManager#persist](https://www.javadoc.io/doc/javax.persistence/javax.persistence-api/latest/javax/persistence/EntityManager.html#persist-java.lang.Object-)
+ * `merge`. See [EntityManager#merge](https://www.javadoc.io/doc/javax.persistence/javax.persistence-api/latest/javax/persistence/EntityManager.html#merge-java.lang.Object-)
+ * `remove`. See [EntityManager#remove](https://www.javadoc.io/doc/javax.persistence/javax.persistence-api/latest/javax/persistence/EntityManager.html#remove-java.lang.Object-)
+ * `find`. See [EntityManager#find](https://www.javadoc.io/doc/javax.persistence/javax.persistence-api/latest/javax/persistence/EntityManager.html#find-java.lang.Class-java.lang.Object-)
+ * `createQuery`. See [EntityManager#createQuery](https://www.javadoc.io/doc/javax.persistence/javax.persistence-api/latest/javax/persistence/EntityManager.html#createQuery-java.lang.String-)
 
 ## 4. Persistence Tests
 
