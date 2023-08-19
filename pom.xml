@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.github.flbulgarelli</groupId>
   <artifactId>jpa-extras</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.0-rc1-SNAPSHOT</version>
   <name>JPA/Hibernate Java 11+ Extras</name>
   <description>Better Integration of JPA/Hibernate 2.2 and Java 11+</description>
    <url>https://github.com/flbulgarelli/jpa-extras</url>

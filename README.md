@@ -101,7 +101,7 @@ dependency into your `pom.xml` file:
     <dependency>
       <groupId>io.github.flbulgarelli</groupId>
       <artifactId>jpa-extras</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.0-rc1</version>
     </dependency>
 ```
 
