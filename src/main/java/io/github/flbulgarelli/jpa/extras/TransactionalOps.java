@@ -1,5 +1,7 @@
 package io.github.flbulgarelli.jpa.extras;
 
+import org.hibernate.Transaction;
+
 import java.util.function.Supplier;
 
 import javax.persistence.EntityTransaction;
@@ -10,6 +12,18 @@ import javax.persistence.EntityTransaction;
  */
 public interface TransactionalOps extends WithEntityManager {
 
+  /**
+   * Runs an action in the context of a transaction.
+   * This method beings a transaction and then commits or rollbacks it
+   * as necessary.
+   *
+   * This method is a more specific version of
+   * {@link #withTransaction(Supplier)},
+   * which also allows to return an object within the action.
+   *
+   * @param action the action to execute
+   * @see #withTransaction(Supplier)
+   */
   default void withTransaction(Runnable action) {
     withTransaction(() -> {
       action.run();
@@ -18,12 +32,17 @@ public interface TransactionalOps extends WithEntityManager {
   }
 
   /**
-   * Runs an action within a transaction, commiting it if action succeeds, or
-   * rollbacking it otherwise
+   * Runs an action in the context of a transaction.
+   * This method beings a transaction and then commits or rollbacks it
+   * as necessary.
    *
    * @param action the action to execute
    * @return the suppliers result
    * @throws RuntimeException if actions fails with a RuntimeException
+   *
+   * @see Transaction#begin()
+   * @see Transaction#commit()
+   * @see Transaction#rollback()
    */
   default <A> A withTransaction(Supplier<A> action) {
     beginTransaction();
