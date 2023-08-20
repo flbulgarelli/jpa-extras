@@ -86,7 +86,7 @@ JPA does not provide an easy way to generate the SQL schema. With this library, 
 
 If you are using IntelliJ, you can add a Run Configuration with the following parameters:
 
-- Main class: `export.io.github.flbulgarelli.jpa.extras.JpaSchemaExport`
+- Main class: `io.github.flbulgarelli.jpa.extras.export.JpaSchemaExport`
 - Program arguments: `-o schema.sql -f`
 - `Modify Options` -> `Add Run Options`-> `Java` -> `Add provided dependencies with "provided" scope to classpath`
 
