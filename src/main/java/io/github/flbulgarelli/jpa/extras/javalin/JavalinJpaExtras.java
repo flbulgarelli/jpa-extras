@@ -14,31 +14,31 @@ import javax.persistence.EntityManager;
 import org.jetbrains.annotations.NotNull;
 
 public class JavalinJpaExtras
-      extends ContextPlugin<PerThreadEntityManagerAccess, JavalinJpaExtras>
+      extends ContextPlugin<Consumer<PerThreadEntityManagerProperties>, JavalinJpaExtras>
       implements WithPerThreadEntityManager, EntityManagerOps, TransactionalOps {
-  private static final String SIMPLE_PERSISTENCE_UNIT_NAME = WithSimplePersistenceUnit.SIMPLE_PERSISTENCE_UNIT_NAME;
+  public final PerThreadEntityManagerAccess managerAccess;
 
   public JavalinJpaExtras() {
-    this(SIMPLE_PERSISTENCE_UNIT_NAME);
+    this(WithSimplePersistenceUnit.PER_THREAD_ENTITY_MANAGER_ACCESS);
   }
 
-  public JavalinJpaExtras(String persistenceUnitName) {
-    this(persistenceUnitName, properties -> {});
+  public JavalinJpaExtras(PerThreadEntityManagerAccess managerAccess) {
+    this(managerAccess, properties -> {});
   }
 
-  public JavalinJpaExtras(Consumer<PerThreadEntityManagerProperties> config) {
-    this(SIMPLE_PERSISTENCE_UNIT_NAME, config);
+  public JavalinJpaExtras(Consumer<PerThreadEntityManagerProperties> pluginConfig) {
+    this(WithSimplePersistenceUnit.PER_THREAD_ENTITY_MANAGER_ACCESS, pluginConfig);
   }
 
-  public JavalinJpaExtras(String persistenceUnitName, Consumer<PerThreadEntityManagerProperties> config) {
-    super(
-        perThreadEntityManagerAccess -> perThreadEntityManagerAccess.configure(config),
-        new PerThreadEntityManagerAccess(persistenceUnitName)
-    );
+  public JavalinJpaExtras(PerThreadEntityManagerAccess managerAccess,
+                          Consumer<PerThreadEntityManagerProperties> pluginConfig) {
+    this.managerAccess = managerAccess;
+    this.pluginConfig = pluginConfig;
   }
 
   @Override
   public void onInitialize(JavalinConfig config) {
+    this.managerAccess.configure(pluginConfig);
     config.router.mount(router -> router.after(ctx -> {
       if (perThreadEntityManagerAccess().isAttached()) {
         if (getTransaction().isActive()) {
@@ -61,6 +61,6 @@ public class JavalinJpaExtras
 
   @Override
   public PerThreadEntityManagerAccess perThreadEntityManagerAccess() {
-    return pluginConfig;
+    return managerAccess;
   }
 }
