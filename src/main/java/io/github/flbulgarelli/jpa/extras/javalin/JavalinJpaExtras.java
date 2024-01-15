@@ -1,0 +1,32 @@
+package io.github.flbulgarelli.jpa.extras.javalin;
+
+import io.github.flbulgarelli.jpa.extras.perthread.PerThreadEntityManagerProperties;
+import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
+import io.javalin.config.JavalinConfig;
+import io.javalin.http.Context;
+import io.javalin.plugin.ContextPlugin;
+import java.util.function.Consumer;
+import org.jetbrains.annotations.NotNull;
+
+public class JavalinJpaExtras extends ContextPlugin<Consumer<PerThreadEntityManagerProperties>, JavalinJpaExtras.Extension> {
+  public JavalinJpaExtras() {
+    this(pluginConfig -> {});
+  }
+
+  public JavalinJpaExtras(Consumer<PerThreadEntityManagerProperties> pluginConfig) {
+    this.pluginConfig = pluginConfig;
+  }
+
+  @Override
+  public void onInitialize(JavalinConfig config) {
+    WithSimplePersistenceUnit.configure(pluginConfig);
+    config.router.mount(router -> router.after(ctx -> WithSimplePersistenceUnit.dispose()));
+  }
+
+  @Override
+  public Extension createExtension(@NotNull Context context) {
+    return new Extension();
+  }
+
+  public static class Extension implements WithSimplePersistenceUnit {}
+}
