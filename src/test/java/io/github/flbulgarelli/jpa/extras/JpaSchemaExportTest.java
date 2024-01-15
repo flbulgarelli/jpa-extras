@@ -16,30 +16,37 @@ class JpaSchemaExportTest {
     var schema = Files.createTempFile("schema", ".sql");
     JpaSchemaExport.execute(WithSimplePersistenceUnit.SIMPLE_PERSISTENCE_UNIT_NAME, schema.toString(), false);
     assertEquals(
-            "create sequence hibernate_sequence start with 1 increment by 1;\n" +
-                    "create table Persistables (id bigint not null, aDate date, aString varchar(255), primary key (id));\n" +
-                    "create table Users (id bigint not null, primary key (id));\n",
-            Files.readString(schema));
+        """
+        create sequence hibernate_sequence start with 1 increment by 1;%1$s\
+        create table Persistables (id bigint not null, aDate date, aString varchar(255), primary key (id));%1$s\
+        create table Users (id bigint not null, primary key (id));%1$s\
+        """.formatted(System.lineSeparator()),
+        Files.readString(schema)
+    );
   }
 
   @Test
   void canGenerateSchemaWithFormat() throws IOException {
     var schema = Files.createTempFile("schema", ".sql");
     JpaSchemaExport.execute(WithSimplePersistenceUnit.SIMPLE_PERSISTENCE_UNIT_NAME, schema.toString(), true);
-    assertEquals("create sequence hibernate_sequence start with 1 increment by 1;\n" +
-                    "\n" +
-                    "    create table Persistables (\n" +
-                    "       id bigint not null,\n" +
-                    "        aDate date,\n" +
-                    "        aString varchar(255),\n" +
-                    "        primary key (id)\n" +
-                    "    );\n" +
-                    "\n" +
-                    "    create table Users (\n" +
-                    "       id bigint not null,\n" +
-                    "        primary key (id)\n" +
-                    "    );\n",
-            Files.readString(schema));
+    assertEquals(
+        """
+        create sequence hibernate_sequence start with 1 increment by 1;%1$s\
+        %1$s\
+            create table Persistables (%1$s\
+               id bigint not null,%1$s\
+                aDate date,%1$s\
+                aString varchar(255),%1$s\
+                primary key (id)%1$s\
+            );%1$s\
+        %1$s\
+            create table Users (%1$s\
+               id bigint not null,%1$s\
+                primary key (id)%1$s\
+            );%1$s\
+        """.formatted(System.lineSeparator()),
+        Files.readString(schema)
+    );
   }
 
 }
