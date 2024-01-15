@@ -39,14 +39,7 @@ public class JavalinJpaExtras
   @Override
   public void onInitialize(JavalinConfig config) {
     this.managerAccess.configure(pluginConfig);
-    config.router.mount(router -> router.after(ctx -> {
-      if (perThreadEntityManagerAccess().isAttached()) {
-        if (getTransaction().isActive()) {
-          throw new IllegalStateException("Can not dispose entity manager if a transaction is active. Ensure it has been already terminated");
-        }
-        perThreadEntityManagerAccess().dispose();
-      }
-    }));
+    config.router.mount(router -> router.after(ctx -> WithSimplePersistenceUnit.dispose(managerAccess)));
   }
 
   @Override
