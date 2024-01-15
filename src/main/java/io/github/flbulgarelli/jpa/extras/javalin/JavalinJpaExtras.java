@@ -16,14 +16,24 @@ import org.jetbrains.annotations.NotNull;
 public class JavalinJpaExtras
       extends ContextPlugin<PerThreadEntityManagerAccess, JavalinJpaExtras>
       implements WithPerThreadEntityManager, EntityManagerOps, TransactionalOps {
+  private static final String SIMPLE_PERSISTENCE_UNIT_NAME = WithSimplePersistenceUnit.SIMPLE_PERSISTENCE_UNIT_NAME;
+
   public JavalinJpaExtras() {
-    this(properties -> {});
+    this(SIMPLE_PERSISTENCE_UNIT_NAME);
+  }
+
+  public JavalinJpaExtras(String persistenceUnitName) {
+    this(persistenceUnitName, properties -> {});
   }
 
   public JavalinJpaExtras(Consumer<PerThreadEntityManagerProperties> config) {
+    this(SIMPLE_PERSISTENCE_UNIT_NAME, config);
+  }
+
+  public JavalinJpaExtras(String persistenceUnitName, Consumer<PerThreadEntityManagerProperties> config) {
     super(
         perThreadEntityManagerAccess -> perThreadEntityManagerAccess.configure(config),
-        new PerThreadEntityManagerAccess(WithSimplePersistenceUnit.SIMPLE_PERSISTENCE_UNIT_NAME)
+        new PerThreadEntityManagerAccess(persistenceUnitName)
     );
   }
 
