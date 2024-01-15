@@ -14,9 +14,9 @@ import java.util.concurrent.ExecutionException;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 
-public class JavalinJpaExtrasTest {
+class JavalinJpaExtrasTest {
   @Test
-  public void canConfigureJavalinApp() throws IOException, InterruptedException, ExecutionException {
+  void canConfigureJavalinApp() throws IOException, InterruptedException, ExecutionException {
     var emFuture = new CompletableFuture<EntityManager>();
 
     Javalin.create(javalinConfig -> javalinConfig.registerPlugin(new JavalinJpaExtras()))
