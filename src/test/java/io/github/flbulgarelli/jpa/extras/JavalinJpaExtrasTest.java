@@ -29,15 +29,15 @@ class JavalinJpaExtrasTest {
   void canConfigureJavalinApp() throws IOException, InterruptedException, ExecutionException {
     var emFuture = new CompletableFuture<EntityManager>();
 
-    Javalin.create(javalinConfig -> javalinConfig.registerPlugin(new JavalinJpaExtras(managerAccess)))
+    var app = Javalin.create(javalinConfig -> javalinConfig.registerPlugin(new JavalinJpaExtras(managerAccess)))
         .get("/", ctx -> {
           var em = ctx.with(JavalinJpaExtras.class).entityManager();
           emFuture.complete(em);
         })
-        .start(8080);
+        .start();
 
     HttpClient.newHttpClient().send(
-        HttpRequest.newBuilder().uri(URI.create("http://localhost:8080/")).build(),
+        HttpRequest.newBuilder().uri(URI.create("http://localhost:%d/".formatted(app.port()))).build(),
         HttpResponse.BodyHandlers.discarding()
     );
 
