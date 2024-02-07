@@ -21,7 +21,14 @@ public class JavalinJpaExtras extends Plugin<JavalinJpaExtras.Config> {
   public void onInitialize(JavalinConfig config) {
     pluginConfig.managerAccess.configure(properties -> properties.putAll(pluginConfig.properties.get()));
     config.router.mount(router ->
-        router.after(ctx -> WithSimplePersistenceUnit.dispose(pluginConfig.managerAccess))
+        router.after(ctx -> {
+          if (pluginConfig.managerAccess.isAttached()) {
+            if (pluginConfig.managerAccess.get().getTransaction().isActive()) {
+              throw new IllegalStateException("Can not dispose entity manager if a transaction is active. Ensure it has been already terminated");
+            }
+            pluginConfig.managerAccess.dispose();
+          }
+        })
     );
   }
 }

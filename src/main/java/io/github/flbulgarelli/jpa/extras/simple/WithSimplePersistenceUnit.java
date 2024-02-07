@@ -54,21 +54,11 @@ public interface WithSimplePersistenceUnit extends WithPerThreadEntityManager, E
    * @see PerThreadEntityManagerAccess#dispose()
    */
   static void dispose() {
-    dispose(PER_THREAD_ENTITY_MANAGER_ACCESS);
-  }
-
-  /**
-   * Disposes the given entity manager attached to the current thread, if any.
-   * As an additional validation, it will fail if transaction is active
-   *
-   * @see PerThreadEntityManagerAccess#dispose()
-   */
-  static void dispose(PerThreadEntityManagerAccess managerAccess) {
-    if (managerAccess.isAttached()) {
-      if (managerAccess.get().getTransaction().isActive()) {
+    if (PER_THREAD_ENTITY_MANAGER_ACCESS.isAttached()) {
+      if (PER_THREAD_ENTITY_MANAGER_ACCESS.get().getTransaction().isActive()) {
         throw new IllegalStateException("Can not dispose entity manager if a transaction is active. Ensure it has been already terminated");
       }
-      managerAccess.dispose();
+      PER_THREAD_ENTITY_MANAGER_ACCESS.dispose();
     }
   }
 }
