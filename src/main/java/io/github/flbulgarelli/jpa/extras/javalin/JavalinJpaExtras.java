@@ -1,59 +1,27 @@
 package io.github.flbulgarelli.jpa.extras.javalin;
 
-import io.github.flbulgarelli.jpa.extras.EntityManagerOps;
-import io.github.flbulgarelli.jpa.extras.TransactionalOps;
 import io.github.flbulgarelli.jpa.extras.perthread.PerThreadEntityManagerAccess;
 import io.github.flbulgarelli.jpa.extras.perthread.PerThreadEntityManagerProperties;
-import io.github.flbulgarelli.jpa.extras.perthread.WithPerThreadEntityManager;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import io.javalin.config.JavalinConfig;
-import io.javalin.http.Context;
-import io.javalin.plugin.ContextPlugin;
+import io.javalin.plugin.Plugin;
 import java.util.function.Consumer;
-import javax.persistence.EntityManager;
-import org.jetbrains.annotations.NotNull;
 
-public class JavalinJpaExtras
-      extends ContextPlugin<Consumer<PerThreadEntityManagerProperties>, JavalinJpaExtras>
-      implements WithPerThreadEntityManager, EntityManagerOps, TransactionalOps {
-  public final PerThreadEntityManagerAccess managerAccess;
-
-  public JavalinJpaExtras() {
-    this(WithSimplePersistenceUnit.PER_THREAD_ENTITY_MANAGER_ACCESS);
+public class JavalinJpaExtras extends Plugin<JavalinJpaExtras.Config> {
+  public static class Config {
+    public PerThreadEntityManagerAccess managerAccess = WithSimplePersistenceUnit.PER_THREAD_ENTITY_MANAGER_ACCESS;
+    public final PerThreadEntityManagerProperties properties = new PerThreadEntityManagerProperties();
   }
 
-  public JavalinJpaExtras(PerThreadEntityManagerAccess managerAccess) {
-    this(managerAccess, properties -> {});
-  }
-
-  public JavalinJpaExtras(Consumer<PerThreadEntityManagerProperties> pluginConfig) {
-    this(WithSimplePersistenceUnit.PER_THREAD_ENTITY_MANAGER_ACCESS, pluginConfig);
-  }
-
-  public JavalinJpaExtras(PerThreadEntityManagerAccess managerAccess,
-                          Consumer<PerThreadEntityManagerProperties> pluginConfig) {
-    this.managerAccess = managerAccess;
-    this.pluginConfig = pluginConfig;
+  public JavalinJpaExtras(Consumer<Config> pluginConfig) {
+    super(pluginConfig, new Config());
   }
 
   @Override
   public void onInitialize(JavalinConfig config) {
-    this.managerAccess.configure(pluginConfig);
-    config.router.mount(router -> router.after(ctx -> WithSimplePersistenceUnit.dispose(managerAccess)));
-  }
-
-  @Override
-  public JavalinJpaExtras createExtension(@NotNull Context context) {
-    return this;
-  }
-
-  @Override
-  public EntityManager entityManager() {
-    return perThreadEntityManagerAccess().get();
-  }
-
-  @Override
-  public PerThreadEntityManagerAccess perThreadEntityManagerAccess() {
-    return managerAccess;
+    pluginConfig.managerAccess.configure(properties -> properties.putAll(pluginConfig.properties.get()));
+    config.router.mount(router ->
+        router.after(ctx -> WithSimplePersistenceUnit.dispose(pluginConfig.managerAccess))
+    );
   }
 }

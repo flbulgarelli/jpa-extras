@@ -1,46 +1,42 @@
 package io.github.flbulgarelli.jpa.extras;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import io.github.flbulgarelli.jpa.extras.javalin.JavalinJpaExtras;
 import io.github.flbulgarelli.jpa.extras.perthread.PerThreadEntityManagerAccess;
-import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
 import io.javalin.Javalin;
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import javax.persistence.EntityManager;
+import java.net.ServerSocket;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class JavalinJpaExtrasTest {
   private PerThreadEntityManagerAccess managerAccess;
+  private int port;
 
   @BeforeEach
-  void setUp() {
-    managerAccess = new PerThreadEntityManagerAccess(WithSimplePersistenceUnit.SIMPLE_PERSISTENCE_UNIT_NAME);
+  void setUp() throws IOException {
+    managerAccess = mock(PerThreadEntityManagerAccess.class);
+    try (var socket = new ServerSocket(0)) {
+      port = socket.getLocalPort();
+    }
   }
 
   @Test
-  void canConfigureJavalinApp() throws IOException, InterruptedException, ExecutionException {
-    var emFuture = new CompletableFuture<EntityManager>();
-
-    var app = Javalin.create(javalinConfig -> javalinConfig.registerPlugin(new JavalinJpaExtras(managerAccess)))
-        .get("/", ctx -> {
-          var em = ctx.with(JavalinJpaExtras.class).entityManager();
-          emFuture.complete(em);
-        })
-        .start();
-
-    HttpClient.newHttpClient().send(
-        HttpRequest.newBuilder().uri(URI.create("http://localhost:%d/".formatted(app.port()))).build(),
-        HttpResponse.BodyHandlers.discarding()
+  void canConfigureJavalinApp() {
+    var app = Javalin.create(javalinConfig ->
+        javalinConfig.registerPlugin(
+            new JavalinJpaExtras(jpaExtrasConfig ->
+                jpaExtrasConfig.managerAccess = managerAccess
+            )
+        )
     );
 
-    assertNotNull(emFuture.get());
+    app.start(port);
+
+    verify(managerAccess, times(1)).configure(any());
   }
 }
