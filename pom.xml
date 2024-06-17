@@ -58,9 +58,10 @@
     </dependency>
 
     <dependency>
-      <groupId>com.intellij</groupId>
+      <groupId>org.jetbrains</groupId>
       <artifactId>annotations</artifactId>
-      <version>9.0.4</version>
+      <version>24.1.0</version>
+      <scope>provided</scope>
     </dependency>
 
     <!-- dependency test -->
