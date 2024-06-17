@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import io.github.flbulgarelli.jpa.extras.perthread.PerThreadEntityManagerAccess;
 import io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit;
+import org.hibernate.cfg.AvailableSettings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +25,7 @@ public class PerThreadEntityManagersTest {
 
     assertDoesNotThrow(() ->
       anotherAccess.configure(properties -> properties
-          .set("hibernate.connection.url", "jdbc:h2:mem:test")
+          .set(AvailableSettings.URL, "jdbc:h2:mem:test")
           .putAll(System.getenv())
           .load("src/test/resources/test.properties"))
     );

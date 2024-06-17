@@ -3,6 +3,7 @@ package io.github.flbulgarelli.jpa.extras;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import org.intellij.lang.annotations.Language;
 
 /**
  * Mixin for adding simple access to common CRUD {@link EntityManager} operations.
@@ -44,14 +45,14 @@ public interface EntityManagerOps extends WithEntityManager {
   /**
    * @see EntityManager#createQuery(String)
    */
-  default Query createQuery(String qlString) {
+  default Query createQuery(@Language("JPAQL") String qlString) {
     return entityManager().createQuery(qlString);
   }
 
   /**
    * @see EntityManager#createQuery(String, Class)
    */
-  default <T> TypedQuery<T> createQuery(String qlString, Class<T> clazz) {
+  default <T> TypedQuery<T> createQuery(@Language("JPAQL") String qlString, Class<T> clazz) {
     return entityManager().createQuery(qlString, clazz);
   }
 

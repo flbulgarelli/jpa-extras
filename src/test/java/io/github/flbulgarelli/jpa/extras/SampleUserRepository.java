@@ -13,4 +13,10 @@ public class SampleUserRepository implements WithSimplePersistenceUnit {
   public SampleUser find(Long id) {
     return find(SampleUser.class, id);
   }
+
+  public SampleUser findByName(String name) {
+    return createQuery("select u from SampleUser u where u.name = :name", SampleUser.class)
+        .setParameter("name", name)
+        .getSingleResult();
+  }
 }
