@@ -1,7 +1,7 @@
 package io.github.flbulgarelli.jpa.extras.export;
 
-import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
@@ -9,9 +9,6 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.hibernate.jpa.HibernatePersistenceProvider;
-import org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
-import org.hibernate.tool.schema.TargetType;
 
 import static io.github.flbulgarelli.jpa.extras.simple.WithSimplePersistenceUnit.SIMPLE_PERSISTENCE_UNIT_NAME;
 
@@ -66,23 +63,27 @@ public class JpaSchemaExport {
 
   public static void execute(String persistenceUnitName, String destination, boolean format) {
     System.out.println("Starting schema export");
-    new HibernatePersistenceProvider() {
-      {
-        EntityManagerFactoryBuilderImpl emfb = (EntityManagerFactoryBuilderImpl) this
-                .getEntityManagerFactoryBuilderOrNull(persistenceUnitName, new HashMap<>());
-        emfb.generateSchema();
 
-        SchemaExport schemaExport = new SchemaExport()
-            .setOutputFile(destination)
-            .setFormat(format);
+    // org.hibernate.tool.hbm2ddl.SchemaExport was removed in Hibernate 6; schema
+    // generation is now driven through the standard JPA
+    // "jakarta.persistence.schema-generation.*" properties.
+    //
+    // Note: unlike the previous implementation, this only writes the script
+    // (TargetType.SCRIPT); it deliberately does not also apply
+    // database.action=create against the live connection. An "export" tool
+    // shouldn't have the side effect of mutating whatever database the
+    // persistence unit happens to be pointed at, and doing so isn't
+    // idempotent (a second run against the same database fails with
+    // "already exists"), which this tool has no reason to assume won't
+    // happen (e.g. running it twice, or running it against a persistence
+    // unit some other process already applied the schema to).
+    Map<String, Object> properties = new HashMap<>();
+    properties.put("jakarta.persistence.schema-generation.scripts.action", "create");
+    properties.put("jakarta.persistence.schema-generation.scripts.create-target", destination);
+    properties.put("hibernate.format_sql", String.valueOf(format));
 
-        schemaExport.createOnly(
-                EnumSet.of(TargetType.DATABASE, TargetType.SCRIPT),
-                emfb.getMetadata());
+    new HibernatePersistenceProvider().generateSchema(persistenceUnitName, properties);
 
-        System.out.println("Schema exported to " + destination);
-      }
-    };
-
+    System.out.println("Schema exported to " + destination);
   }
 }

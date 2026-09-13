@@ -1,6 +1,6 @@
 package io.github.flbulgarelli.jpa.extras;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -29,14 +29,14 @@ class JpaSchemaExportTest {
     assertEquals("create sequence hibernate_sequence start with 1 increment by 1;\n" +
                     "\n" +
                     "    create table Persistables (\n" +
-                    "       id bigint not null,\n" +
+                    "        id bigint not null,\n" +
                     "        aDate date,\n" +
                     "        aString varchar(255),\n" +
                     "        primary key (id)\n" +
                     "    );\n" +
                     "\n" +
                     "    create table Users (\n" +
-                    "       id bigint not null,\n" +
+                    "        id bigint not null,\n" +
                     "        primary key (id)\n" +
                     "    );\n",
             Files.readString(schema));

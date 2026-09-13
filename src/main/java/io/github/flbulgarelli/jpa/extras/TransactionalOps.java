@@ -4,7 +4,7 @@ import org.hibernate.Transaction;
 
 import java.util.function.Supplier;
 
-import javax.persistence.EntityTransaction;
+import jakarta.persistence.EntityTransaction;
 
 /**
  * @author flbulgarelli
