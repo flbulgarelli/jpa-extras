@@ -20,6 +20,11 @@
 			<property name="hibernate.format_sql" value="true" />
 			<property name="use_sql_comments" value="true" />
 			<property name="hibernate.hbm2ddl.auto" value="update" />
+
+			<!-- Hibernate 6 defaults to a sequence per entity hierarchy (<entity>_seq)
+			     instead of a single shared "hibernate_sequence" as in 5.x. This preserves
+			     the legacy naming so JpaSchemaExportTest's expected DDL stays accurate. -->
+			<property name="hibernate.id.db_structure_naming_strategy" value="legacy" />
 		</properties>
 
 	</persistence-unit>
