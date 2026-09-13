@@ -35,11 +35,11 @@ public class UserRepository implements WithSimplePersistenceUnit {
 By using this mixin, you'll get access to an `entityManager()`, plus some helper methods that act as shortcuts to
 the corresponding `EntityManager`:
 
- * `persist`. See [EntityManager#persist](https://www.javadoc.io/doc/javax.persistence/javax.persistence-api/latest/javax/persistence/EntityManager.html#persist-java.lang.Object-)
- * `merge`. See [EntityManager#merge](https://www.javadoc.io/doc/javax.persistence/javax.persistence-api/latest/javax/persistence/EntityManager.html#merge-java.lang.Object-)
- * `remove`. See [EntityManager#remove](https://www.javadoc.io/doc/javax.persistence/javax.persistence-api/latest/javax/persistence/EntityManager.html#remove-java.lang.Object-)
- * `find`. See [EntityManager#find](https://www.javadoc.io/doc/javax.persistence/javax.persistence-api/latest/javax/persistence/EntityManager.html#find-java.lang.Class-java.lang.Object-)
- * `createQuery`. See [EntityManager#createQuery](https://www.javadoc.io/doc/javax.persistence/javax.persistence-api/latest/javax/persistence/EntityManager.html#createQuery-java.lang.String-)
+ * `persist`. See [EntityManager#persist](https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/entitymanager#persist(java.lang.Object))
+ * `merge`. See [EntityManager#merge](https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/entitymanager#merge(T))
+ * `remove`. See [EntityManager#remove](https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/entitymanager#remove(java.lang.Object))
+ * `find`. See [EntityManager#find](https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/entitymanager#find(java.lang.Class,java.lang.Object))
+ * `createQuery`. See [EntityManager#createQuery](https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/entitymanager#createQuery(java.lang.String))
 
 ## 4. Persistence Tests
 
@@ -101,9 +101,13 @@ dependency into your `pom.xml` file:
     <dependency>
       <groupId>io.github.flbulgarelli</groupId>
       <artifactId>jpa-extras</artifactId>
-      <version>1.0.0-rc1</version>
+      <version>2.0.0-rc1</version>
     </dependency>
 ```
+
+> **Note:** starting with `2.0.0`, jpa-extras targets **Jakarta Persistence 3.0 and Hibernate 6**
+> (`jakarta.persistence.*`). If you're on Hibernate 5 / `javax.persistence.*`, keep using the
+> `1.x` line instead.
 
 ### Snapshots
 

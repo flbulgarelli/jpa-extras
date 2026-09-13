@@ -3,9 +3,9 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.github.flbulgarelli</groupId>
   <artifactId>jpa-extras</artifactId>
-  <version>1.0.0-rc1-SNAPSHOT</version>
+  <version>2.0.0-rc1-SNAPSHOT</version>
   <name>JPA/Hibernate Java 11+ Extras</name>
-  <description>Better Integration of JPA/Hibernate 2.2 and Java 11+</description>
+  <description>Better Integration of Jakarta Persistence 3.0/Hibernate 6 and Java 11+</description>
    <url>https://github.com/flbulgarelli/jpa-extras</url>
   <licenses>
     <license>
@@ -52,9 +52,9 @@
     </dependency>
 
     <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-entitymanager</artifactId>
-      <version>5.6.12.Final</version>
+      <groupId>org.hibernate.orm</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>6.6.56.Final</version>
     </dependency>
 
     <!-- dependency test -->

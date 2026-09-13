@@ -1,7 +1,7 @@
 package io.github.flbulgarelli.jpa.extras;
 
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 
 public interface WithEntityManager {
 

@@ -2,7 +2,7 @@ package io.github.flbulgarelli.jpa.extras.perthread;
 
 import io.github.flbulgarelli.jpa.extras.WithEntityManager;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 
 public interface WithPerThreadEntityManager extends WithEntityManager {
 

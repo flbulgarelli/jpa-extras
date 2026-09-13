@@ -2,9 +2,9 @@ package io.github.flbulgarelli.jpa.extras.perthread;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 
 /**
  * @author gprieto
