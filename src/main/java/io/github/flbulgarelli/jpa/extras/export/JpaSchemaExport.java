@@ -65,12 +65,19 @@ public class JpaSchemaExport {
     System.out.println("Starting schema export");
 
     // org.hibernate.tool.hbm2ddl.SchemaExport was removed in Hibernate 6; schema
-    // generation is now driven entirely through the standard JPA
-    // "jakarta.persistence.schema-generation.*" properties, applied against both
-    // the database and a script target (mirroring the previous createOnly(DATABASE, SCRIPT)
-    // call, which performed create-without-drop against both targets).
+    // generation is now driven through the standard JPA
+    // "jakarta.persistence.schema-generation.*" properties.
+    //
+    // Note: unlike the previous implementation, this only writes the script
+    // (TargetType.SCRIPT); it deliberately does not also apply
+    // database.action=create against the live connection. An "export" tool
+    // shouldn't have the side effect of mutating whatever database the
+    // persistence unit happens to be pointed at, and doing so isn't
+    // idempotent (a second run against the same database fails with
+    // "already exists"), which this tool has no reason to assume won't
+    // happen (e.g. running it twice, or running it against a persistence
+    // unit some other process already applied the schema to).
     Map<String, Object> properties = new HashMap<>();
-    properties.put("jakarta.persistence.schema-generation.database.action", "create");
     properties.put("jakarta.persistence.schema-generation.scripts.action", "create");
     properties.put("jakarta.persistence.schema-generation.scripts.create-target", destination);
     properties.put("hibernate.format_sql", String.valueOf(format));
